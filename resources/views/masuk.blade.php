@@ -203,6 +203,7 @@
                 <button type="submit" class="tombol-utama" id="tombol-masuk">Masuk sebagai pelanggan</button>
             </form>
 
+            {{-- Login Google: hanya untuk pelanggan --}}
             <div id="blok-google">
                 <p class="atau">atau</p>
                 <a href="#" class="tombol-google">
@@ -216,7 +217,12 @@
                 </a>
             </div>
 
-            <p class="daftar" id="blok-daftar">Belum punya akun? <a href="{{ route('daftar') }}">Daftar sekarang</a></p>
+            {{-- Daftar: tampil untuk pelanggan & vendor, link mengikuti tab, disembunyikan untuk admin --}}
+            <p class="daftar" id="blok-daftar">
+                Belum punya akun?
+                <a id="link-daftar" href="{{ route('daftar') }}">Daftar sekarang</a>
+            </p>
+        </div>
     </main>
 </div>
 
@@ -226,6 +232,16 @@
     const tombolMasuk = document.getElementById('tombol-masuk');
     const blokGoogle = document.getElementById('blok-google');
     const blokDaftar = document.getElementById('blok-daftar');
+    const linkDaftar = document.getElementById('link-daftar');
+
+        const urlDaftar = {
+            pelanggan: "{{ route('daftar') }}",
+            vendor: "{{ url('/vendor/register') }}"
+        };    
+        const teksDaftar = {
+        pelanggan: 'Daftar sekarang',
+        vendor: 'Daftar sebagai vendor'
+        };
 
     tab.forEach(function (btn) {
         btn.addEventListener('click', function () {
@@ -236,10 +252,17 @@
             inputPeran.value = peran;
             tombolMasuk.textContent = 'Masuk sebagai ' + peran;
 
-            // Login Google dan pendaftaran mandiri hanya untuk pelanggan
-            const hanyaPelanggan = peran === 'pelanggan';
-            blokGoogle.style.display = hanyaPelanggan ? '' : 'none';
-            blokDaftar.style.display = hanyaPelanggan ? '' : 'none';
+            // Login Google hanya untuk pelanggan
+            blokGoogle.style.display = peran === 'pelanggan' ? '' : 'none';
+
+            // Daftar: pelanggan & vendor boleh, admin tidak
+            if (peran === 'admin') {
+                blokDaftar.style.display = 'none';
+            } else {
+                blokDaftar.style.display = '';
+                linkDaftar.href = urlDaftar[peran];
+                linkDaftar.textContent = teksDaftar[peran];
+            }
         });
     });
 
