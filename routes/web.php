@@ -14,3 +14,11 @@ Route::get('/masuk', fn () => view('masuk'))->name('masuk');
 Route::post('/masuk', function () {
     // sementara kosong, logika login dibuat belakangan
 })->name('masuk.proses');
+
+use App\Http\Controllers\DaftarController;
+
+Route::middleware('guest')->group(function () {
+    Route::get('/daftar',  [DaftarController::class, 'create'])->name('daftar');
+    Route::post('/daftar', [DaftarController::class, 'store'])->name('daftar.store')->middleware('throttle:10,1');
+});
+

@@ -216,8 +216,7 @@
                 </a>
             </div>
 
-            <p class="daftar" id="blok-daftar">Belum punya akun? <a href="#">Daftar sekarang</a></p>
-        </div>
+            <p class="daftar" id="blok-daftar">Belum punya akun? <a href="{{ route('daftar') }}">Daftar sekarang</a></p>
     </main>
 </div>
 
